@@ -74,7 +74,6 @@ coverage.xml
 
 # Local env files
 .env
-.env.*
 
 # MacOS
 .DS_Store

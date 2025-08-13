@@ -3,12 +3,14 @@
 AI Agent Application
 
 This application allows you to interact with an AI agent that can use various tools
-to answer questions and perform tasks.
+to answer questions and perform tasks. The agent supports both streaming and non-streaming
+responses from Ollama.
 
 Usage:
 1. Direct execution: python app.py
 2. CLI with question: python app.py "Your question here"
 3. CLI with flags: python app.py --question "Your question here" --no-save
+4. Disable streaming: python app.py "Your question here" --no-stream
 """
 
 import sys
@@ -38,6 +40,7 @@ Examples:
   python app.py "Get the latest trending songs and save them to a file"
   python app.py --question "What files are in the current directory?" --no-save
   python app.py -q "Create a new directory called 'test'" --messages-file "my_conversation.json"
+  python app.py "Explain the weather" --no-stream
         """
     )
     
@@ -57,6 +60,12 @@ Examples:
         '--no-save',
         action='store_true',
         help='Do not save the conversation history to a file'
+    )
+    
+    parser.add_argument(
+        '--no-stream',
+        action='store_true',
+        help='Do not stream the response from Ollama (default: streaming enabled)'
     )
     
     parser.add_argument(
@@ -94,7 +103,8 @@ Examples:
                 result, messages = run_agent_with_question(
                     question=question,
                     save_messages=not args.no_save,
-                    messages_file=args.messages_file
+                    messages_file=args.messages_file,
+                    stream=not args.no_stream
                 )
                 
                 print(f"\n✅ Final Result:")
@@ -120,7 +130,8 @@ Examples:
             result, messages = run_agent_with_question(
                 question=question,
                 save_messages=not args.no_save,
-                messages_file=args.messages_file
+                messages_file=args.messages_file,
+                stream=not args.no_stream
             )
             
             print(f"\n✅ Final Result:")

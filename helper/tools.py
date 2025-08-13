@@ -109,7 +109,8 @@ def ask_any_question_internet(question, vendor="Perplexity"):
     Returns:
         The response text from the API or an error message.
     """
-    load_dotenv()
+    # Load .env file from the project root directory
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
     base_url = os.getenv("API_BASE_URL")
     if not base_url:
         return "Error: API_BASE_URL not set in environment."
