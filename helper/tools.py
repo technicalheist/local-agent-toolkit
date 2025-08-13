@@ -2,6 +2,8 @@ import os
 import re
 import json
 import requests
+import subprocess
+from dotenv import load_dotenv
 
 
 def list_files(directory, recursive=False):
@@ -107,14 +109,88 @@ def ask_any_question_internet(question, vendor="Perplexity"):
     Returns:
         The response text from the API or an error message.
     """
-    url = "https://macllm.technicalheist.com/ask" + vendor
+    load_dotenv()
+    base_url = os.getenv("API_BASE_URL")
+    if not base_url:
+        return "Error: API_BASE_URL not set in environment."
+    url = base_url.rstrip("/") + "/ask" + vendor
 
     payload = json.dumps({"question": question})
     headers = {"Content-Type": "application/json"}
 
     try:
         response = requests.post(url, headers=headers, data=payload)
-        response.raise_for_status()  # Raise an HTTPError for bad responses (4xx or 5xx)
+        response.raise_for_status()
         return response.text
     except requests.exceptions.RequestException as e:
         return f"Error calling API: {e}"
+
+
+def mkdir(path):
+    """
+    Create a directory at the specified path.
+
+    Args:
+        path (str): The path of the directory to create.
+
+    Returns:
+        bool: True if created or already exists, or error string if failed.
+    """
+    try:
+        os.makedirs(path, exist_ok=True)
+        return True
+    except Exception as e:
+        return str(e)
+
+
+def execute_shell_command(command, working_directory=None):
+    """
+    Execute a shell command and return the output.
+
+    Args:
+        command (str): The shell command to execute.
+        working_directory (str, optional): The directory to execute the command in.
+            If None, uses the current working directory.
+
+    Returns:
+        dict: A dictionary containing 'stdout', 'stderr', 'return_code', and 'success'.
+    """
+    try:
+        if working_directory and not os.path.isdir(working_directory):
+            return {
+                "stdout": "",
+                "stderr": f"Error: Directory '{working_directory}' not found.",
+                "return_code": 1,
+                "success": False
+            }
+        
+        result = subprocess.run(
+            command,
+            shell=True,
+            capture_output=True,
+            text=True,
+            cwd=working_directory,
+            timeout=30
+        )
+        
+        return {
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+            "return_code": result.returncode,
+            "success": result.returncode == 0
+        }
+    
+    except subprocess.TimeoutExpired:
+        return {
+            "stdout": "",
+            "stderr": "Error: Command timed out after 30 seconds.",
+            "return_code": 124,
+            "success": False
+        }
+    except Exception as e:
+        return {
+            "stdout": "",
+            "stderr": f"Error executing command: {e}",
+            "return_code": 1,
+            "success": False
+        }
