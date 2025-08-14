@@ -5,9 +5,10 @@ import requests
 import json
 from typing import Callable, Dict, Any, List
 from dotenv import load_dotenv
+from .setup import ensure_env_setup
 
-# Load .env file from the project root directory
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
+# Ensure environment is set up
+ensure_env_setup()
 
 MAX_ITERATIONS = os.getenv("MAX_ITERATIONS", "25")
 class OllamaAgent:

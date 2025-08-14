@@ -27,6 +27,7 @@ Usage Examples:
 from .tool_call import run_agent_with_question
 from .tools import *
 from .tools_definition import tools
+from .setup import ensure_env_setup, interactive_setup
 
 # Make the main classes importable from the top level
 try:
@@ -41,12 +42,14 @@ except ImportError:
         OllamaAgent = None
         OpenAIAgent = None
 
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 __all__ = [
     'run_agent_with_question', 
     'OllamaAgent', 
     'OpenAIAgent',
     'tools',
+    'ensure_env_setup',
+    'interactive_setup',
     # Tool functions
     'list_files',
     'read_file', 

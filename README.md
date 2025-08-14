@@ -16,6 +16,8 @@ pip install local-agent-toolkit
 
 ### Command Line Usage
 
+First, set up your environment configuration (see [Environment Setup](#environment-setup) below), then:
+
 ```bash
 # Ask a question directly
 local-agent "What files are in the current directory?"
@@ -95,6 +97,62 @@ agent/
 ├── requirements.txt          # Python dependencies
 ├── .env                     # Environment variables
 └── README.md               # This file
+```
+
+## Environment Setup
+
+On your first run, the toolkit will guide you through an interactive setup process where you can:
+- Choose between Ollama (local) and OpenAI agents
+- Configure the necessary settings (model, API keys, base URLs, etc.)
+- Save your configuration either locally or globally
+
+```
+$ local-agent "What files are in the current directory?"
+
+========================================================
+🚀 Local Agent Toolkit - First-time Setup
+========================================================
+
+Welcome! Let's set up your environment for Local Agent Toolkit.
+This will help you configure the AI agent you want to use.
+
+First, choose which AI agent you want to use:
+1. Ollama (local LLM, requires Ollama running)
+2. OpenAI (requires API key)
+
+Enter your choice (1 or 2): 2
+
+Enter your OpenAI API key: sk-...
+
+Enter OpenAI API base URL [https://api.openai.com/v1]: 
+
+Enter OpenAI model name [gpt-4]: 
+
+Where would you like to save this configuration?
+1. Current directory (.env file in your working directory)
+2. Global user configuration (~/.config/local-agent-toolkit/.env)
+
+Enter your choice (1 or 2): 2
+
+✅ Configuration saved successfully!
+📁 Configuration file: /home/user/.config/local-agent-toolkit/.env
+
+🔄 Configuration loaded and ready to use!
+========================================================
+```
+
+You can also manually configure the toolkit by:
+
+1. Creating a `.env` file in your working directory
+2. Setting environment variables in your terminal session
+3. Creating a global configuration in `~/.config/local-agent-toolkit/.env`
+
+Example `.env` file contents:
+```
+CURRENT_AGENT=OLLAMA
+OLLAMA_MODEL=llama3.1
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_HOST=http://localhost:11434
 ```
 
 ## ⚙️ Configuration

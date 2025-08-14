@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from dotenv import load_dotenv
 from .tools import (
     list_files,
@@ -13,9 +14,11 @@ from .tools import (
 from agents.OllamaAgent import OllamaAgent
 from agents.OpenAIAgent import OpenAIAgent
 from .tools_definition import tools as tool_definitions
+from .setup import ensure_env_setup
 
-# Load .env file from the project root directory
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
+if not ensure_env_setup():
+    print("❌ Environment setup failed. Please configure the environment variables before using the toolkit.")
+    sys.exit(1)
 
 def run_agent_with_question(question: str, save_messages: bool = True, messages_file: str = "messages.json", stream: bool = True):
     """

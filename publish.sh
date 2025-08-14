@@ -3,12 +3,11 @@
 # Local PyPI Publishing Script for Local Agent Toolkit
 # This script helps you build and publish your package to PyPI
 
-set -e  # Exit on any error
+set -e
 
 echo "🚀 Local Agent Toolkit - PyPI Publishing Script"
 echo "================================================"
 
-# Check if we're in a virtual environment
 if [[ "$VIRTUAL_ENV" == "" ]]; then
     echo "⚠️  Warning: You're not in a virtual environment."
     echo "   It's recommended to use a virtual environment."
@@ -21,19 +20,18 @@ if [[ "$VIRTUAL_ENV" == "" ]]; then
     fi
 fi
 
-# Install/upgrade build tools
 echo "📦 Installing build dependencies..."
 pip install --upgrade pip build twine
 
-# Clean previous builds
 echo "🧹 Cleaning previous builds..."
 rm -rf dist/ build/ *.egg-info/
 
-# Build the package
+CURRENT_VERSION=$(grep -oP "version=\"\K[^\"]+" setup.py)
+echo "📋 Current version: $CURRENT_VERSION"
+
 echo "🔨 Building the package..."
 python -m build
 
-# Check the package
 echo "🔍 Checking the package..."
 twine check dist/*
 

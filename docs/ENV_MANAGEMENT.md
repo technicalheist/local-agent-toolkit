@@ -4,17 +4,52 @@ This guide explains how to manage environment variables for the Local Agent Tool
 
 ## 🎯 Overview
 
-The Local Agent Toolkit supports multiple ways to manage environment variables, allowing you to use it flexibly across different projects and deployment scenarios.
+The Local Agent Toolkit provides flexible environment configuration options, with an interactive setup process on first run and multiple methods for advanced users.
+
+## 🔄 Interactive Setup
+
+When you first run the `local-agent` command without any configuration, the toolkit will automatically launch an interactive setup guide:
+
+```
+$ local-agent
+
+========================================================
+🚀 Local Agent Toolkit - First-time Setup
+========================================================
+
+Welcome! Let's set up your environment for Local Agent Toolkit.
+This will help you configure the AI agent you want to use.
+
+First, choose which AI agent you want to use:
+1. Ollama (local LLM, requires Ollama running)
+2. OpenAI (requires API key)
+
+...
+```
+
+This guide will:
+- Help you select the right agent type
+- Configure the necessary settings
+- Save your preferences to a configuration file
+- Get you up and running quickly
 
 ## 🔧 Configuration Methods
 
 ### Method 1: Project-Level .env File (Recommended)
 
-Create a `.env` file in your project root:
+Create a `.env` file in the directory where you'll run the `local-agent` command:
 
 ```bash
-# Copy the example file
-cp .env.example .env
+# Copy the example file (if available)
+cp .env.example .env  # if you have the repository
+
+# Or create from scratch
+cat > .env << EOL
+CURRENT_AGENT=OLLAMA
+OLLAMA_MODEL=llama3.1
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_HOST=http://localhost:11434
+EOL
 
 # Edit with your values
 nano .env  # or your preferred editor
@@ -56,7 +91,29 @@ $env:OPENAI_API_KEY="sk-your-key-here"
 - Works across all projects
 - No files to manage
 
-### Method 3: Programmatic Configuration
+### Method 3: Global Configuration File (New)
+
+Create a global configuration file that works from any directory:
+
+```bash
+# Create a global configuration directory
+mkdir -p ~/.config/local-agent-toolkit
+
+# Create .env file there
+cat > ~/.config/local-agent-toolkit/.env << EOL
+CURRENT_AGENT=OLLAMA
+OLLAMA_MODEL=llama3.1
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_HOST=http://localhost:11434
+EOL
+```
+
+**Benefits:**
+- Works from any directory on your system
+- No need to create .env files in each project
+- Consistent configuration across projects
+
+### Method 4: Programmatic Configuration
 
 Set variables in your Python code:
 

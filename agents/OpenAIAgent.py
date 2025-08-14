@@ -43,8 +43,10 @@ class OpenAIAgent:
         if system_prompt:
             self.messages.append({"role": "system", "content": system_prompt})
         
+        api_base_url = api_base or os.getenv("OPENAI_API_BASE") or "https://api.openai.com/v1"
+        
         self.client = OpenAI(
-            base_url=api_base or os.getenv("OPENAI_API_BASE"),
+            base_url=api_base_url,
             api_key=api_key or os.getenv("OPENAI_API_KEY")
         )
 

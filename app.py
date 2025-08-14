@@ -142,6 +142,13 @@ Examples:
                 
         except Exception as e:
             print(f"❌ Error: {e}")
+            
+            # Provide helpful error guidance
+            if "CURRENT_AGENT" in str(e) or "API_KEY" in str(e) or "OLLAMA_MODEL" in str(e):
+                print("\nThere might be an issue with your configuration.")
+                print("Try running the command again to go through the interactive setup,")
+                print("or see the environment management guide in the documentation.")
+                
             sys.exit(1)
 
 if __name__ == "__main__":
