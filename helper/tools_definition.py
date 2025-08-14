@@ -83,27 +83,27 @@ tools = [
             },
         },
     },
-    {
-        "type": "function",
-        "function": {
-            "name": "ask_any_question_internet",
-            "description": "Sends a question to an external internet-based API and returns the response text.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "question": {
-                        "type": "string",
-                        "description": "The question string to send to the API for answering.",
-                    },
-                    "vendor": {
-                        "type": "string",
-                        "description": 'The name of the vendor/service to use for answering the question. Defaults to "Perplexity".',
-                    },
-                },
-                "required": ["question"],
-            },
-        },
-    },
+    # {
+    #     "type": "function",
+    #     "function": {
+    #         "name": "ask_any_question_internet",
+    #         "description": "Sends a question to an external internet-based API and returns the response text.",
+    #         "parameters": {
+    #             "type": "object",
+    #             "properties": {
+    #                 "question": {
+    #                     "type": "string",
+    #                     "description": "The question string to send to the API for answering.",
+    #                 },
+    #                 "vendor": {
+    #                     "type": "string",
+    #                     "description": 'The name of the vendor/service to use for answering the question. Defaults to "Perplexity".',
+    #                 },
+    #             },
+    #             "required": ["question"],
+    #         },
+    #     },
+    # },
         {
             "type": "function",
             "function": {

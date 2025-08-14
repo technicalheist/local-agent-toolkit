@@ -1,0 +1,29 @@
+{
+    "mcpServers": {
+        "playwright": {
+            "command": "npx",
+            "args": [
+                "@playwright/mcp@latest"
+            ],
+            "description": "Playwright MCP server for web automation and browser control"
+        },
+        "filesystem": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-filesystem",
+                "./"
+            ],
+            "description": "Filesystem MCP server for file operations",
+            "disabled": true
+        },
+        "sqlite": {
+            "command": "npx",
+            "args": [
+                "@modelcontextprotocol/server-sqlite",
+                "./database/database.db"
+            ],
+            "description": "SQLite MCP server for database operations",
+            "disabled": true
+        }
+    }
+}
