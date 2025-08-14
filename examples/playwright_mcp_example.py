@@ -25,7 +25,6 @@ from helper.tools import (
     list_files, read_file, write_file, list_files_by_pattern,
     ask_any_question_internet, mkdir, execute_shell_command
 )
-from mcp_server.config_loader import create_agent_with_config
 
 # Load environment variables
 load_dotenv()
@@ -71,13 +70,21 @@ def main():
     Always be helpful and explain what you're doing step by step.
     """
     
-    # Create the agent with MCP integration using config file
+    # Configure MCP servers directly
+    mcp_servers_config = {
+        "playwright": {
+            "command": "npx",
+            "args": ["@playwright/mcp@latest"]
+        }
+    }
+    
+    # Create the agent with MCP integration
     print("Initializing OpenAI Agent with MCP integration...")
-    agent = create_agent_with_config(
-        OpenAIAgentWithMCP,
+    agent = OpenAIAgentWithMCP(
         tool_definitions=tools,
         tool_callables=tool_callables,
-        system_prompt=system_prompt
+        system_prompt=system_prompt,
+        mcp_servers_config=mcp_servers_config
     )
     
     # List available tools

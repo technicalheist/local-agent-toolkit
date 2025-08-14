@@ -5,7 +5,8 @@
             "args": [
                 "@playwright/mcp@latest"
             ],
-            "description": "Playwright MCP server for web automation and browser control"
+            "description": "Playwright MCP server for web automation and browser control",
+            "disabled": true
         },
         "filesystem": {
             "command": "npx",
@@ -17,12 +18,18 @@
             "disabled": true
         },
         "sqlite": {
-            "command": "npx",
+            "command": "docker",
             "args": [
-                "@modelcontextprotocol/server-sqlite",
-                "./database/database.db"
+                "run",
+                "-i",
+                "--rm",
+                "-v",
+                "mcp-sqlite:/mcp",
+                "mcp/sqlite",
+                "--db-path",
+                "/mcp/db.sqlite"
             ],
-            "description": "SQLite MCP server for database operations",
+            "description": "SQLite MCP server for database operations using Docker",
             "disabled": true
         }
     }

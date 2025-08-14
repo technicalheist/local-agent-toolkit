@@ -276,8 +276,29 @@ class MCPClient:
         """Stop an MCP server."""
         if server_name in self.processes:
             process = self.processes[server_name]
-            process.terminate()
-            await process.wait()
+            
+            try:
+                # First try graceful termination
+                process.terminate()
+                
+                # Wait up to 3 seconds for graceful shutdown
+                try:
+                    await asyncio.wait_for(process.wait(), timeout=3.0)
+                except asyncio.TimeoutError:
+                    # If graceful shutdown failed, force kill
+                    self.logger.warning(f"Server '{server_name}' didn't terminate gracefully, forcing kill")
+                    process.kill()
+                    await process.wait()
+                    
+            except Exception as e:
+                self.logger.error(f"Error stopping server '{server_name}': {e}")
+                # Try force kill as last resort
+                try:
+                    process.kill()
+                    await process.wait()
+                except:
+                    pass
+            
             del self.processes[server_name]
             
             # Remove tools from this server
@@ -340,7 +361,21 @@ class MCPManager:
     
     def stop_all_servers(self):
         """Stop all servers synchronously."""
-        self.loop.run_until_complete(self.client.stop_all_servers())
+        if self.loop and not self.loop.is_closed():
+            try:
+                self.loop.run_until_complete(self.client.stop_all_servers())
+            except RuntimeError as e:
+                if "cannot be called from a running event loop" in str(e):
+                    # If we're in an event loop, create a new one
+                    import asyncio
+                    new_loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(new_loop)
+                    try:
+                        new_loop.run_until_complete(self.client.stop_all_servers())
+                    finally:
+                        new_loop.close()
+                else:
+                    raise
     
     def __del__(self):
         """Cleanup when object is destroyed."""
@@ -348,3 +383,12 @@ class MCPManager:
             self.stop_all_servers()
         except:
             pass
+    
+    def __enter__(self):
+        """Context manager support."""
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context manager cleanup."""
+        self.stop_all_servers()
+        return False

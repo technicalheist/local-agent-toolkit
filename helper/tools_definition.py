@@ -83,63 +83,63 @@ tools = [
             },
         },
     },
-    # {
-    #     "type": "function",
-    #     "function": {
-    #         "name": "ask_any_question_internet",
-    #         "description": "Sends a question to an external internet-based API and returns the response text.",
-    #         "parameters": {
-    #             "type": "object",
-    #             "properties": {
-    #                 "question": {
-    #                     "type": "string",
-    #                     "description": "The question string to send to the API for answering.",
-    #                 },
-    #                 "vendor": {
-    #                     "type": "string",
-    #                     "description": 'The name of the vendor/service to use for answering the question. Defaults to "Perplexity".',
-    #                 },
-    #             },
-    #             "required": ["question"],
-    #         },
-    #     },
-    # },
-        {
-            "type": "function",
-            "function": {
-                "name": "mkdir",
-                "description": "Create a directory at the specified path.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "path": {
-                            "type": "string",
-                            "description": "The path of the directory to create."
-                        }
+    {
+        "type": "function",
+        "function": {
+            "name": "ask_any_question_internet",
+            "description": "Sends a question to an external internet-based API and returns the response text.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "question": {
+                        "type": "string",
+                        "description": "The question string to send to the API for answering.",
                     },
-                    "required": ["path"],
+                    "vendor": {
+                        "type": "string",
+                        "description": 'The name of the vendor/service to use for answering the question. Defaults to "Perplexity".',
+                    },
                 },
+                "required": ["question"],
             },
         },
-        {
-            "type": "function",
-            "function": {
-                "name": "execute_shell_command",
-                "description": "Execute a shell command and return the output.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "command": {
-                            "type": "string",
-                            "description": "The shell command to execute."
-                        },
-                        "working_directory": {
-                            "type": "string",
-                            "description": "The directory to execute the command in. If not provided, uses the current working directory."
-                        }
-                    },
-                    "required": ["command"],
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "mkdir",
+            "description": "Create a directory at the specified path.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "description": "The path of the directory to create.",
+                    }
                 },
+                "required": ["path"],
             },
         },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "execute_shell_command",
+            "description": "Execute a shell command and return the output.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "command": {
+                        "type": "string",
+                        "description": "The shell command to execute.",
+                    },
+                    "working_directory": {
+                        "type": "string",
+                        "description": "The directory to execute the command in. If not provided, uses the current working directory.",
+                    },
+                },
+                "required": ["command"],
+            },
+        },
+    },
 ]
