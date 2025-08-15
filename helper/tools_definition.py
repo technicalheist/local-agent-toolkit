@@ -104,42 +104,67 @@ tools = [
             },
         },
     },
-        {
-            "type": "function",
-            "function": {
-                "name": "mkdir",
-                "description": "Create a directory at the specified path.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "path": {
-                            "type": "string",
-                            "description": "The path of the directory to create."
-                        }
-                    },
-                    "required": ["path"],
+    {
+        "type": "function",
+        "function": {
+            "name": "mkdir",
+            "description": "Create a directory at the specified path.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {
+                        "type": "string",
+                        "description": "The path of the directory to create.",
+                    }
                 },
+                "required": ["path"],
             },
         },
-        {
-            "type": "function",
-            "function": {
-                "name": "execute_shell_command",
-                "description": "Execute a shell command and return the output.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "command": {
-                            "type": "string",
-                            "description": "The shell command to execute."
-                        },
-                        "working_directory": {
-                            "type": "string",
-                            "description": "The directory to execute the command in. If not provided, uses the current working directory."
-                        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "execute_shell_command",
+            "description": "Execute a shell command and return the output.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "command": {
+                        "type": "string",
+                        "description": "The shell command to execute.",
                     },
-                    "required": ["command"],
+                    "working_directory": {
+                        "type": "string",
+                        "description": "The directory to execute the command in. If not provided, uses the current working directory.",
+                    },
                 },
+                "required": ["command"],
             },
         },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "sqlite_execute_sql",
+            "description": "Executes an SQL statement on a SQLite database and returns the result. Default database path is 'database/database.db'.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "sql": {
+                        "type": "string",
+                        "description": "The SQL statement to execute.",
+                    },
+                    "params": {
+                        "type": ["array", "null"],
+                        "description": "Parameters for parameterized queries (optional).",
+                    },
+                    "db_path": {
+                        "type": "string",
+                        "description": "Path to the SQLite database file (optional). Defaults to 'database/database.db'.",
+                    },
+                },
+                "required": ["sql"],
+            },
+        },
+    },
 ]

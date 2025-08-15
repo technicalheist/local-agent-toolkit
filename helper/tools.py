@@ -1,9 +1,44 @@
 import os
+import sqlite3
 import re
 import json
 import requests
 import subprocess
 from dotenv import load_dotenv
+
+
+def sqlite_execute_sql(sql, params=None, db_path="database/database.db"):
+    """
+    Executes an SQL statement on a SQLite database and returns the result.
+
+    Args:
+        sql (str): The SQL statement to execute.
+        params (tuple or list, optional): Parameters for parameterized queries.
+        db_path (str, optional): Path to the SQLite database file. Defaults to 'database/database.db'.
+
+    Returns:
+        dict: Contains 'success', 'result' (query result or affected rows), and 'error' (if any).
+    """
+    try:
+        db_dir = os.path.dirname(db_path)
+        if db_dir and not os.path.exists(db_dir):
+            os.makedirs(db_dir, exist_ok=True)
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        if params:
+            cursor.execute(sql, params)
+        else:
+            cursor.execute(sql)
+        if sql.strip().lower().startswith("select"):
+            result = cursor.fetchall()
+        else:
+            conn.commit()
+            result = cursor.rowcount
+        cursor.close()
+        conn.close()
+        return {"success": True, "result": result, "error": None}
+    except Exception as e:
+        return {"success": False, "result": None, "error": str(e)}
 
 
 def list_files(directory, recursive=False):
@@ -91,7 +126,9 @@ def list_files_by_pattern(directory, pattern, recursive=False):
             if entry.is_file() and re.search(pattern, entry.name):
                 file_list.append(entry.path)
             elif entry.is_dir() and recursive:
-                file_list.extend(list_files_by_pattern(entry.path, pattern, recursive=True))
+                file_list.extend(
+                    list_files_by_pattern(entry.path, pattern, recursive=True)
+                )
         return file_list
     except Exception as e:
         return f"Error listing files by pattern in '{directory}': {e}"
@@ -110,7 +147,9 @@ def ask_any_question_internet(question, vendor="Perplexity"):
         The response text from the API or an error message.
     """
     # Load .env file from the project root directory
-    load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
+    load_dotenv(
+        dotenv_path=os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+    )
     base_url = os.getenv("API_BASE_URL")
     if not base_url:
         return "Error: API_BASE_URL not set in environment."
@@ -162,36 +201,36 @@ def execute_shell_command(command, working_directory=None):
                 "stdout": "",
                 "stderr": f"Error: Directory '{working_directory}' not found.",
                 "return_code": 1,
-                "success": False
+                "success": False,
             }
-        
+
         result = subprocess.run(
             command,
             shell=True,
             capture_output=True,
             text=True,
             cwd=working_directory,
-            timeout=30
+            timeout=30,
         )
-        
+
         return {
             "stdout": result.stdout,
             "stderr": result.stderr,
             "return_code": result.returncode,
-            "success": result.returncode == 0
+            "success": result.returncode == 0,
         }
-    
+
     except subprocess.TimeoutExpired:
         return {
             "stdout": "",
             "stderr": "Error: Command timed out after 30 seconds.",
             "return_code": 124,
-            "success": False
+            "success": False,
         }
     except Exception as e:
         return {
             "stdout": "",
             "stderr": f"Error executing command: {e}",
             "return_code": 1,
-            "success": False
+            "success": False,
         }

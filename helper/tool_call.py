@@ -9,7 +9,8 @@ from .tools import (
     list_files_by_pattern,
     ask_any_question_internet,
     execute_shell_command,
-    mkdir
+    mkdir,
+    sqlite_execute_sql
 )
 from agents.OllamaAgent import OllamaAgent
 from agents.OpenAIAgent import OpenAIAgent
@@ -42,6 +43,7 @@ def run_agent_with_question(question: str, save_messages: bool = True, messages_
         "ask_any_question_internet": ask_any_question_internet,
         "mkdir": mkdir,
         "execute_shell_command": execute_shell_command,
+        "sqlite_execute_sql": sqlite_execute_sql
     }
 
     current_agent = os.getenv("CURRENT_AGENT", "OLLAMA").upper()
